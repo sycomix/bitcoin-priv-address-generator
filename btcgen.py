@@ -1,4 +1,4 @@
-__author__ = 'Pringers'
+# Created by Davanum Srinivas
 
 import ecdsa
 import ecdsa.der
