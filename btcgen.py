@@ -36,7 +36,7 @@ def countLeadingChars(s, ch):
 # https://en.bitcoin.it/wiki/Base58Check_encoding
 def base58CheckEncode(version, payload):
     s = chr(version) + payload
-    checksum = hashlib.sha256(hashlib.sha256(s).digest()).digest()[0:4]
+    checksum = hashlib.sha256(hashlib.sha256(s).digest()).digest()[:4]
     result = s + checksum
     leadingZeros = countLeadingChars(result, '\0')
     return '1' * leadingZeros + base58encode(base256decode(result))
@@ -60,13 +60,9 @@ def keyToAddr(s):
 # Generate a random private key
 private_key = os.urandom(32).encode('hex')
 
-# Write the Secret Exponent/HEX, Private Key and Address to a text file.
-file = open("BTC_" + keyToAddr(private_key)[:6], "w")
+with open(f"BTC_{keyToAddr(private_key)[:6]}", "w") as file:
+    file.write("Secret Exponent/HEX (Uncompressed) : %s \n" % private_key)
 
-file.write("Secret Exponent/HEX (Uncompressed) : %s \n" % private_key)
+    file.write("Private Key     : %s \n" % privateKeyToWif(private_key))
 
-file.write("Private Key     : %s \n" % privateKeyToWif(private_key))
-
-file.write("Address         : %s \n" % keyToAddr(private_key))
-
-file.close()
+    file.write("Address         : %s \n" % keyToAddr(private_key))
